@@ -1,0 +1,217 @@
+package Star;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+class Ekran extends JFrame  {
+    
+    
+    public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Ekran frame = new Ekran();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+    
+    private JPanel contentPane;
+    
+    public Ekran() throws FileNotFoundException, IOException {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 10, 1300, 900);
+		
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);  
+        contentPane.setFocusable(true);
+        contentPane.requestFocusInWindow();
+       String satirSutun[][] = new String[200][200];
+       String yeniGiden[][] = new String[200][200];
+            /// DOSYADAN VERÝ ALMA ///
+        File f = new File("C://Users//lenovo//Desktop//Harita.txt");
+        String[] karakter = new String[2];
+        String[] degerler = new String[20];
+        if (f.exists()) {
+
+            BufferedReader reader = null;
+            reader = new BufferedReader(new FileReader(f));
+            String satir = reader.readLine();
+            int say = 0;
+            while (satir != null) {
+                //System.out.println(satir);
+                if (say < 2) {
+                    if (say ==2)break;
+                    karakter[say] = satir;
+                    say++;
+                    
+                }
+                if (say >= 2) {
+                    degerler[say] = satir;
+                    say++;
+                }
+                satir = reader.readLine();
+            }
+        } else {
+            System.out.println("Dosya okunurken hata oluþtu"); }
+        ///ALINAN VERÝLERÝ BÖLME ÝÞLEMÝ ///
+        
+        String[] karakter2 = new String[200];
+        int j = 0;
+        for (int i = 3; i <= 13; i++) {
+            String[] sifirBir = degerler[i].split("\t");
+            for (String sifir : sifirBir) {
+                 //System.out.println(sifir);
+                satirSutun[i][j] = sifir;
+                j++;
+            }
+            j = 0;
+        }
+            
+       // System.out.print(satirSutun[3][5]);
+        JButton buton[] = new JButton[14];
+    	//buton.setBounds(562, 10, 50, 50);
+    	//buton.setText("0");
+    	//contentPane.add(buton);
+    	
+        
+        /// BUTON OLUSTURMA 
+    	int je=0;
+    	int y=50;
+    	int t=0;
+    	for (int i=3; i<14; i++) {
+    		  		
+    			for (int jr=0; jr<14; jr++) {
+
+    			buton[i] = new JButton();
+        		buton[i].setBounds(10+je, 10+t, 50, 50);
+            	buton[i].setText(satirSutun[i][jr]);
+            	buton[i].setBackground(Color.yellow);
+            	
+            	contentPane.add(buton[i]);
+        		je=je+50;
+    		}
+    		
+    			t=t+50;
+    			je=0;	
+    			
+    	}
+    	
+    	//HAREKET KONTROLUUU
+    
+    	contentPane.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int satir=8,sutun=6;
+				yeniGiden[8][6] = satirSutun[satir][sutun];
+				
+				System.out.println(satirSutun[8][6]);
+				
+				System.out.println(satirSutun[7][6]);
+				
+				System.out.println(satirSutun[9][6]);
+				
+				// TODO Auto-generated method stub
+				 if("Right".equals(KeyEvent.getKeyText(e.getKeyCode()))) {
+                     System.out.println("Right Button Detected");
+                     
+                     if(satirSutun[satir][sutun+1].equals("1")) {
+                    	 System.out.println("Gider");
+                    	 sutun=sutun+1;
+                     }
+                     else {
+                    	 System.out.println("Duvar");
+                     }
+                     
+				 }
+				 
+				 if("Left".equals(KeyEvent.getKeyText(e.getKeyCode()))) {
+                     System.out.println("Left Button Detected");
+                     
+                     if(satirSutun[satir][sutun-1].equals("1")) {
+                    	 System.out.println("Gider");
+                    	 sutun=sutun-1;
+                    	 
+                    	 
+                     }
+                     else {
+                    	 System.out.println("Duvar");
+                     }
+                     
+                     
+				 }
+				 if("Up".equals(KeyEvent.getKeyText(e.getKeyCode()))) {
+                     System.out.println("Up Button Detected");
+                     
+                     if(satirSutun[satir-1][sutun].equals("1")) {
+                    	 System.out.println("Gider");
+                    	 satir=satir-1;
+                    	 
+                    	 
+                     }
+                     else {
+                    	 System.out.println("Duvar");
+                     }
+                     
+                     
+				 }
+				 if("Down".equals(KeyEvent.getKeyText(e.getKeyCode()))) {
+                     System.out.println("Down Button Detected");
+                     
+                     if(satirSutun[satir+1][sutun].equals("1")) {
+                    	 System.out.println("Gider");
+                    	 satir=satir+1;
+                    	 
+                    	 
+                     }
+                     else {
+                    	 System.out.println("Duvar");
+                     }
+                     
+				 }
+				 
+				
+			}
+		});
+    	
+    	
+    	
+    }
+
+	
+	
+ 
+}
